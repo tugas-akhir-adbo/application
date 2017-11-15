@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nifty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://nifty-gui.lessvoid.com/nifty-gui" xsi:schemaLocation="https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd https://raw.githubusercontent.com/void256/nifty-gui/1.4/nifty-core/src/main/resources/nifty.xsd">
+    <screen id="ScoreBoard" controller="mygame.Main">
+        <layer id="GLayerBase" childLayout="center"/>
+        <layer id="GLayer1" childLayout="absolute">
+            <panel id="GPanel0" childLayout="absolute" width="357px" x="220" y="168" style="nifty-panel-simple" valign="center" height="202px">
+                <control name="label" id="labelHighScore" textLineHeight="30px" color="#000000" width="100px" x="200" y="79" text="0" font="aurulent-sans-16.fnt" height="50px"/>
+                <control name="label" id="labelScore" textLineHeight="30px" color="#000000" width="100px" x="40" y="79" text="0" font="aurulent-sans-16.fnt" height="50px"/>
+                <control name="label" id="GLabel1" textLineHeight="30px" color="#000000" width="100px" x="200" y="23" text="Highscore:" font="aurulent-sans-16.fnt" height="50px"/>
+                <control name="button" id="buttonMainMenu" childLayout="center" width="130px" x="25" y="150" valign="" label="Go to Main Menu" align="center" height="30px"/>
+                <control name="button" id="buttonTryAgain" childLayout="center" width="130px" x="190" y="150" valign="" label="Try Again" align="center" height="30px"/>
+                <control name="label" id="GLabel0" textLineHeight="30px" color="#000000" width="100px" x="40" y="23" text="Score:" font="aurulent-sans-16.fnt" height="50px"/>
+            </panel>
+        </layer>
+    </screen>
+</nifty>
