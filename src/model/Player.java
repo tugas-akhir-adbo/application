@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import com.jme3.animation.AnimChannel;
@@ -19,17 +14,18 @@ import controller.ChangeLaneControl;
 import controller.MyCharacterControl;
 
 /**
- * This class is class for object player (character)
- * @author i16012
+ * This is the Player class of this game
+ * This class is for object player (character of this game)
+ * @author i16012 - Apsari Ayusya Cantika
+ * @since 
+ * @version 
  */
 public class Player extends GameObject {
 
-    private static final int ROTATE_FRONT = -3;
-
-    private MyCharacterControl myCharCon; //character's controller
-    private boolean jumping, //attribute for check whether the object is jumping 
-					changingLaneToLeft, //attribute for check whether the object is changing lane to left 
-					changingLaneToRight; //attribute for check whether the object is changing lane to right
+    private MyCharacterControl myCharCon; //this object's controller (character's controller)
+    private boolean jumping, //attribute for check whether the object is jumping
+                    changingLaneToLeft, //attribute for check whether the object is changing lane to left
+                    changingLaneToRight; //attribute for check whether the object is changing lane to right
     private byte currentLane; //current lane of this object
 
     /**
@@ -44,9 +40,9 @@ public class Player extends GameObject {
      * @param height The height of this object
      * @param length The length of this object
      * @param type Geometric shape of this object
-     * @param closedOrFlipped condition for this object
+     * @param closedOrFlipped Condition for this object
      * @param name The name for this object
-     * @param am Asset Manager for this object
+     * @param am Asset manager of this object
      * @param mat The material for this object
      * @param texture The texture for this object
      */
@@ -66,9 +62,9 @@ public class Player extends GameObject {
      * @param height The height of this object
      * @param length The length of this object
      * @param type Geometric shape of this object
-     * @param closedOrFlipped condition for this object
+     * @param closedOrFlipped Condition for this object
      * @param name The name for this object
-     * @param am Asset Manager for this object
+     * @param am Asset manager of this object
      * @param mat The material for this object
      * @param texture The texture for this object
      */
@@ -85,9 +81,9 @@ public class Player extends GameObject {
      * @param height The height of this object
      * @param length The length of this object
      * @param type Geometric shape of this object
-     * @param closedOrFlipped condition for this object
+     * @param closedOrFlipped Condition for this object
      * @param name The name for this object
-     * @param am Asset Manager for this object
+     * @param am Asset manager of this object
      * @param mat The material for this object
      * @param texture The texture for this object
      */
@@ -111,7 +107,7 @@ public class Player extends GameObject {
      * @param length The length of this object
      * @param name The name for this object
      * @param path The path for this object's model
-     * @param am Asset Manager for this object
+     * @param am Asset manager of this object
      */
     public Player(float x, float y, float z, float vx, float vy, float vz, float width, float height, float length, String name, String path, AssetManager am) {
         super(x, y, z, vx, vy, vz, width, height, length, name, path, am);
@@ -124,7 +120,7 @@ public class Player extends GameObject {
      * Constructor
      * @param name The name for this object
      * @param path The path for this object's model
-     * @param am Asset Manager for this object
+     * @param am Asset manager of this object
      */
     public Player(String name, String path, AssetManager am) {
         super(name, path, am);
@@ -145,12 +141,12 @@ public class Player extends GameObject {
     }
 
     /**
-     * Setter for character's controller
+     * Method to set character's controller
      */
     private void setMyCharControl() {
         BoxCollisionShape boxShape = new BoxCollisionShape(new Vector3f(this.length / 2f, this.height / 2f, this.width / 2f));
         myCharCon = new MyCharacterControl(boxShape, 0.5f);
-        myCharCon.setJumpSpeed(100);
+        myCharCon.setJumpSpeed(90);
         myCharCon.setGravity(75);
         this.spatial.addControl(myCharCon);
     }
@@ -170,6 +166,7 @@ public class Player extends GameObject {
      * @param lane the lane the player wants
      */
     public void changeLane(byte lane) {
+        //calling controller's method that changing the lane
         myCharCon.changeLane(lane);
     }
 
@@ -177,6 +174,7 @@ public class Player extends GameObject {
      * Method to make object jump
      */
     public void jump() {
+        //calling controller's method that make character jump
         myCharCon.jump();
     }
 
@@ -185,7 +183,7 @@ public class Player extends GameObject {
      * @param tpf time per frame
      */
     public void rotateToFrontAnimation(float tpf) {
-        this.spatial.rotate(tpf * ROTATE_FRONT * 5, 0, 0);
+        this.spatial.rotate(tpf * GameUtil.ROTATE_FRONT * 5, 0, 0);
     }
 
     /**
@@ -194,7 +192,6 @@ public class Player extends GameObject {
      */
     public void rotateToLeftAnimation(float tpf) {
         this.spatial.rotate(0, tpf * GameUtil.ROTATE_SIDE * -1f, 0);
-//        tempRadians += tpf * GameUtil.ROTATE_SIDE * -1f;
     }
 
     /**
@@ -203,7 +200,6 @@ public class Player extends GameObject {
      */
     public void rotateToRightAnimation(float tpf) {
         this.spatial.rotate(0, tpf * GameUtil.ROTATE_SIDE, 0);
-//        tempRadians += tpf * GameUtil.ROTATE_SIDE;
     }
 
     /**
@@ -211,7 +207,7 @@ public class Player extends GameObject {
      * @param tpf time per frame
      */
     public void normalRotationAnimation(float tpf) {
-        this.spatial.rotate(tpf * ROTATE_FRONT, 0, 0);
+        this.spatial.rotate(tpf * GameUtil.ROTATE_FRONT, 0, 0);
     }
 
     /**
@@ -222,7 +218,7 @@ public class Player extends GameObject {
         return jumping;
     }
 
-    /**
+   /**
      * Setter for variable jumping
      * @param jumping new value of variable jumping
      */
@@ -238,7 +234,7 @@ public class Player extends GameObject {
         return changingLaneToLeft;
     }
 
-    /**
+   /**
      * Setter for variable changingLaneToLeft
      * @param changingLaneToLeft new value of variable changingLaneToLeft
      */
@@ -246,7 +242,7 @@ public class Player extends GameObject {
         this.changingLaneToLeft = changingLaneToLeft;
     }
 
-    /**
+     /**
      * Method to check whether the object is changing lane to the right (getter)
      * @return true if the object is changing lane to the right, false if the object isn't changing lane to the right
      */
@@ -264,7 +260,7 @@ public class Player extends GameObject {
 
     /**
      * Method to get current lane (getter)
-     * @return current lane         
+     * @return current lane of this object        
      */
     public byte getCurrentLane() {
         return currentLane;
@@ -276,5 +272,16 @@ public class Player extends GameObject {
      */
     public void setCurrentLane(byte currentLane) {
         this.currentLane = currentLane;
+    }
+    
+    /**
+     * Method to restart the game
+     */
+    public void restartGame() {
+        //set x,y,z to restart the game
+        x = 0;
+        y = 7.5f + 7;
+        z = 0;
+        this.spatial.setLocalTranslation(x, y, z);
     }
 }
