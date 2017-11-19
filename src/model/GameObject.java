@@ -1,13 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
-import com.jme3.animation.AnimEventListener;
 import com.jme3.asset.AssetManager;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
@@ -28,90 +20,86 @@ import com.jme3.texture.Texture;
 import java.io.IOException;
 
 /**
+ * This object represents the basic object used in this game. 
+ * All objects in this game will be extending this class.
  *
- * @author DarKnight98
+ * @author Joshua Lauwrich
  * @since Saturday, 4 November 2017
- * @version 1.0
+ * @version 2.0
  */
-public abstract class GameObject extends AbstractControl implements AnimEventListener {
+public abstract class GameObject extends AbstractControl {
 
     /**
-     *
+     * Coordinate x depends on the parent node
      */
     protected float x;
 
     /**
-     *
+     * Coordinate y depends on the parent node
      */
     protected float y;
 
     /**
-     *
+     * Coordinate z depends on the parent node
      */
     protected float z;
 
     /**
-     *
+     * The speed of this object is in the x axis
+
      */
     protected float vx;
 
     /**
-     *
+     * The speed of this object is in the y axis
+
      */
     protected float vy;
 
     /**
-     *
+     * The speed of this object is in the z axis
+
      */
     protected float vz;
 
     /**
-     *
+     * The width of this object
      */
     protected float width;
 
     /**
-     *
+     * The height of this object
      */
     protected float height;
 
     /**
-     *
+     * The length of this object
      */
     protected float length;
 
     /**
-     *
+     * The name for this object
      */
     protected String name;
 
-    /**
-     *
-     */
-    protected AnimChannel animChannel;
 
     /**
-     *
-     */
-    protected AnimControl animControl;
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param vx
-     * @param vy
-     * @param vz
-     * @param width
-     * @param height
-     * @param length
-     * @param type
-     * @param closedOrFlipped
-     * @param name
-     * @param am
-     * @param mat
-     * @param texture
+     * Constructor 
+     * @param x Coordinate x depends on the parent node
+     * @param y Coordinate y depends on the parent node
+     * @param z Coordinate z depends on the parent node
+     * @param vx The speed of this object is in the x axis
+     * @param vy The speed of this object is in the y axis
+     * @param vz The speed of this object is in the z axis
+     * @param width The width of this object
+     * @param height The height of this object
+     * @param length The length of this object
+     * @param type Geometric shape of this object
+     * @param closedOrFlipped Condition for cylinder
+     * @param name The name for this object
+     * @param am Asset Manager for loading the model
+     * @param mat The material of this object
+     * @param texture The texture of this object
      */
     public GameObject(float x, float y, float z, float vx, float vy, float vz,
             float width, float height, float length, byte type, boolean closedOrFlipped,
@@ -121,6 +109,7 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
         this.z = z;
         this.vx = vx;
         this.vy = vy;
+        this.vz = vz;
         this.width = width;
         this.height = height;
         this.length = length;
@@ -148,26 +137,24 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
                 this.spatial.setLocalTranslation(x, y, z);
                 break;
         }
-        mat.setTexture(name, texture);
+        if (texture != null) mat.setTexture("ColorMap", texture);
         this.spatial.setMaterial(mat);
-        
-        setUpAnim();
     }
 
     /**
-     *
-     * @param vx
-     * @param vy
-     * @param vz
-     * @param width
-     * @param height
-     * @param length
-     * @param type
-     * @param closedOrFlipped
-     * @param name
-     * @param am
-     * @param mat
-     * @param texture
+     * Constructor
+     * @param vx The speed of this object is in the x axis
+     * @param vy The speed of this object is in the y axis
+     * @param vz The speed of this object is in the z axis
+     * @param width The width of this object
+     * @param height The height of this object
+     * @param length The length of this object
+     * @param type Geometric shape of this object
+     * @param closedOrFlipped Condition for cylinder
+     * @param name The name for this object
+     * @param am Asset Manager for loading the model
+     * @param mat The material of this object
+     * @param texture The texture of this object
      */
     public GameObject(float vx, float vy, float vz,
             float width, float height, float length, byte type, boolean closedOrFlipped,
@@ -177,6 +164,7 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
         this.z = 0;
         this.vx = vx;
         this.vy = vy;
+        this.vz = vz;
         this.width = width;
         this.height = height;
         this.length = length;
@@ -200,23 +188,23 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
                 this.spatial = new Geometry(name, sphere);
                 break;
         }
-        mat.setTexture(name, texture);
+        
+        if (texture != null) mat.setTexture("ColorMap", texture);
         this.spatial.setMaterial(mat);
         
-        setUpAnim();
     }
 
     /**
-     *
-     * @param width
-     * @param height
-     * @param length
-     * @param type
-     * @param closedOrFlipped
-     * @param name
-     * @param am
-     * @param mat
-     * @param texture
+     * Constructor
+     * @param width The width of this object
+     * @param height The height of this object
+     * @param length The length of this object
+     * @param type Geometric shape of this object
+     * @param closedOrFlipped Condition for cylinder
+     * @param name The name for this object
+     * @param am Asset Manager for loading the model
+     * @param mat The material of this object
+     * @param texture The texture of this object
      */
     public GameObject(float width, float height, float length, byte type, boolean closedOrFlipped,
             String name, AssetManager am, Material mat, Texture texture) {
@@ -225,6 +213,7 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
         this.z = 0;
         this.vx = 0;
         this.vy = 0;
+        this.vz = 0;
         this.width = width;
         this.height = height;
         this.length = length;
@@ -248,46 +237,48 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
                 this.spatial = new Geometry(name, sphere);
                 break;
         }
-        mat.setTexture(name, texture);
+        if (texture != null) mat.setTexture(name, texture);
         this.spatial.setMaterial(mat);
-        
-        setUpAnim();
     }
 
     /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param vx
-     * @param vy
-     * @param vz
-     * @param name
-     * @param path
-     * @param am
+     * Constructor
+     * @param x Coordinate x depends on the parent node
+     * @param y Coordinate y depends on the parent node
+     * @param z Coordinate z depends on the parent node
+     * @param vx The speed of this object is in the x axis
+     * @param vy The speed of this object is in the y axis
+     * @param vz The speed of this object is in the z axis
+     * @param width The width of this object
+     * @param height The height of this object
+     * @param length The length of this object
+     * @param name The name for this object
+     * @param path The path for this object's model
+     * @param am Asset Manager for loading the model
      */
     public GameObject(float x, float y, float z, float vx, float vy, float vz,
+            float width, float height, float length,
             String name, String path, AssetManager am) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.vx = vx;
         this.vy = vy;
-        this.width = 0;
-        this.height = 0;
-        this.length = 0;
+        this.vz = vz;
+        this.width = width;
+        this.height = height;
+        this.length = length;
         this.name = name;
 
         this.spatial = am.loadModel(path);
-        
-        setUpAnim();
+        this.spatial.setLocalTranslation(x, y, z);
     }
 
     /**
-     *
-     * @param name
-     * @param path
-     * @param am
+     * Constructor
+     * @param name The name for this object
+     * @param path The path for this object's model
+     * @param am Asset Manager for loading the model
      */
     public GameObject(String name, String path, AssetManager am) {
         this.x = 0;
@@ -301,31 +292,20 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
         this.name = name;
 
         this.spatial = am.loadModel(path);
-        
-        setUpAnim();
     }
 
     /**
-     *
-     * @param name
+     * Constructor
+     * @param obj 
      */
-    public GameObject(String name) {
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        this.vx = 0;
-        this.vy = 0;
-        this.width = 0;
-        this.height = 0;
-        this.length = 0;
-        this.name = name;
-        
-        setUpAnim();
+    public GameObject(Spatial obj) {
+        this.spatial = obj;
     }
     
     /**
-     *
-     * @param ex
+     * Write down the information of this object on the capsule so that 
+     * when it is destroyed the information is kept.
+     * @param ex JMEExporter object for saving this object.
      * @throws IOException
      */
     @Override
@@ -346,8 +326,8 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
     }
 
     /**
-     *
-     * @param im
+     * Read the information of this object that has been saved previously.
+     * @param im JMEImporter object for reading the information for this object.
      * @throws IOException
      */
     @Override
@@ -370,32 +350,32 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
     }
 
     /**
-     *
-     * @param node
+     * Attach this object to a node.
+     * @param node parent node
      */
     public void attachToNode(Node node) {
         node.attachChild(this.spatial);
     }
 
     /**
-     *
-     * @param node
+     * Detach this object from a node
+     * @param node parent node
      */
     public void dettachFromNode(Node node) {
         node.detachChild(this.spatial);
     }
 
     /**
-     *
-     * @return
+     * Getter of variable x
+     * @return Coordinate x depends on the parent node
      */
     public float getX() {
         return x;
     }
 
     /**
-     *
-     * @param x
+     * Setter of variable x
+     * @param x Coordinate x depends on the parent node
      */
     public void setX(float x) {
         this.x = x;
@@ -403,16 +383,16 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
     }
 
     /**
-     *
-     * @return
+     * Getter of variable y
+     * @return Coordinate y depends on the parent node
      */
     public float getY() {
         return y;
     }
 
     /**
-     *
-     * @param y
+     * Setter of variable y
+     * @param y Coordinate y depends on the parent node
      */
     public void setY(float y) {
         this.y = y;
@@ -420,16 +400,16 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
     }
 
     /**
-     *
-     * @return
+     * Getter of variable z
+     * @return Coordinate z depends on the parent node
      */
     public float getZ() {
         return z;
     }
 
     /**
-     *
-     * @param z
+     * Setter of variable z
+     * @param z Coordinate z depends on the parent node
      */
     public void setZ(float z) {
         this.z = z;
@@ -437,113 +417,94 @@ public abstract class GameObject extends AbstractControl implements AnimEventLis
     }
 
     /**
-     *
-     * @return
+     * Getter of variabel vx
+     * @return The speed of this object is in the x axis
      */
     public float getVx() {
         return vx;
     }
 
     /**
-     *
-     * @param vx
+     * Setter for variable vx
+     * @param vx New speed for this object in x axis
      */
     public void setVx(float vx) {
         this.vx = vx;
     }
 
     /**
-     *
-     * @return
+     * Getter of variabel vy
+     * @return The speed of this object is in the y axis
      */
     public float getVy() {
         return vy;
     }
 
     /**
-     *
-     * @param vy
+     * Setter for variable vy
+     * @param vy New speed for this object in y axis
      */
     public void setVy(float vy) {
         this.vy = vy;
     }
 
     /**
-     *
-     * @return
+     * Getter of variabel vz
+     * @return The speed of this object is in the z axis
      */
     public float getVz() {
         return vz;
     }
 
     /**
-     *
-     * @param vz
+     * Setter for variable vz
+     * @param vz New speed for this object in z axis
      */
     public void setVz(float vz) {
         this.vz = vz;
     }
 
     /**
-     *
-     * @return
+     * Getter for variable width
+     * @return The width of this object
      */
     public float getWidth() {
         return width;
     }
 
     /**
-     *
-     * @return
+     * Getter for variable height
+     * @return The height of this object
      */
     public float getHeight() {
         return height;
     }
 
     /**
-     *
-     * @return
+     * Getter for variable length
+     * @return The lengt of this object
      */
     public float getLength() {
         return length;
     }
 
     /**
-     *
-     * @return
+     * Getter for variable name
+     * @return The name of this object
      */
     public String getName() {
         return name;
     }
 
-    private void setUpAnim() {
-        animControl = this.spatial.getControl(AnimControl.class);
-        animControl.addListener(this);
-        animChannel = animControl.createChannel();
+    @Override
+    protected void controlRender(RenderManager rm, ViewPort vp) {
+        //NOTHING TO DO
     }
 
     /*
      * To be implemented in subclass.
      */
-    @Override
-    protected abstract void controlRender(RenderManager rm, ViewPort vp);
-
-    @Override
-    public abstract void onAnimChange(AnimControl control, AnimChannel channel, String animName);
-
-    @Override
-    public abstract void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName);
 
     @Override
     protected abstract void controlUpdate(float tpf);
-    
-    /**
-     *
-     */
-    public abstract void reset();
-    
-    /**
-     *
-     */
-    public abstract void stop();
 }
