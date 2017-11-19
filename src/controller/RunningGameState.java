@@ -27,6 +27,8 @@ import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 
 /**
@@ -54,9 +56,9 @@ public class RunningGameState extends BaseAppState implements ScreenController {
     private MyInputListener inputListener;      //Input listener class to handle input from user
     private byte currentScreen;                 //Show which screen is currently being shown (from GUI)
     private static boolean pause = false;       //True if the game is paused and this state also paused
-//    private final JFXPanel fxPanel = new JFXPanel();
-//    private Spatial videoContainer;
-//    private MediaPlayer mp;
+    private boolean isPlaySoundHighScore;       //True if the sound effect is played
+    private AudioNode highScorePassed;          //Node for sound effect when player pass the highscore
+    private AudioNode die;                      //Node for sound effect when player hit the obstacle
 
     @Override
     protected void initialize(Application app) {
@@ -69,6 +71,7 @@ public class RunningGameState extends BaseAppState implements ScreenController {
         playerNode = new Node("player node");
 
         pause = false;
+        isPlaySoundHighScore = false;
 
         //set current screen to run state
         currentScreen = GameUtil.RUN_STATE;
@@ -92,6 +95,7 @@ public class RunningGameState extends BaseAppState implements ScreenController {
         initPlayer();
         initKeys();
         initObstacle();
+        initAudioEffect();
     }
 
     /**
@@ -185,6 +189,23 @@ public class RunningGameState extends BaseAppState implements ScreenController {
         camNode.lookAt(playerNode.getLocalTranslation(), Vector3f.UNIT_Y);
     }
 
+    private void initAudioEffect() {
+        //Initialize the audio
+        highScorePassed = new AudioNode(assetManager, "Sounds/passHighScore.ogg", DataType.Buffer);
+        highScorePassed.setPositional(false);
+        highScorePassed.setLooping(false);
+        highScorePassed.setVolume(2);
+
+        die = new AudioNode(assetManager, "Sounds/die.ogg", DataType.Buffer);
+        die.setPositional(false);
+        die.setLooping(false);
+        die.setVolume(2);
+
+        //Attach the audio node to root node
+        rootNode.attachChild(highScorePassed);
+        rootNode.attachChild(die);
+    }
+
     @Override
     protected void cleanup(Application app) {
         Platform.exit();
@@ -251,6 +272,12 @@ public class RunningGameState extends BaseAppState implements ScreenController {
                 //Set the label text with the current score
                 scoreLabel.getNiftyControl(Label.class).setText(score + "");
 
+                //Play the sound effect
+                if (score > highScore && !isPlaySoundHighScore) {
+                    highScorePassed.playInstance();
+                    isPlaySoundHighScore = true;
+                }
+
                 break;
             case GameUtil.PAUSE_STATE:
 
@@ -265,12 +292,15 @@ public class RunningGameState extends BaseAppState implements ScreenController {
             case GameUtil.RES_STATE:
                 //Check if the current screen is result screen
                 if (currentScreen != GameUtil.RES_STATE) {
+                    //Play the sound effect
+                    die.playInstance();
+
                     //Change the screen to result screen
                     Main.nifty.gotoScreen("resultScreen");
                     currentScreen = GameUtil.RES_STATE;
                     if (score > highScore) {
                         highScore = score;
-                        
+
                         //Try to save the highscore
                         try {
                             GameUtil.getInstance().saveHighScore(highScore);
@@ -296,6 +326,12 @@ public class RunningGameState extends BaseAppState implements ScreenController {
                     //Reset the score and the object state
                     score = 0;
                     tempScore = 0;
+                    try {
+                        highScore = GameUtil.getInstance().loadHighScore();
+                    } catch (IOException ex) {
+                        Logger.getLogger(RunningGameState.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    isPlaySoundHighScore = false;
                     player.restartGame();
                     particle.setLocalTranslation(player.getX(), player.getY(), player.getZ());
                     obstacleFactory.restartGame();
