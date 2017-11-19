@@ -1,7 +1,6 @@
 package controller;
 
 import com.jme3.app.Application;
-import com.jme3.app.state.AppStateManager;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.input.InputManager;
 import de.lessvoid.nifty.Nifty;
@@ -20,18 +19,16 @@ import model.GameUtil;
 public class MainMenuState extends BaseAppState implements ScreenController {
 
     private Main app;       //Application object
-    private AppStateManager stateManager;   //State Manager
     private InputManager inputManager;      //Input Manager
 
     @Override
     protected void initialize(Application app) {
         //Initialize all the variable
         this.app = (Main) getApplication();
-        this.stateManager = this.app.getStateManager();
         this.inputManager = this.app.getInputManager();
         
         //Load nifty GUI from xml file
-        Main.nifty.fromXml("Interface/as.xml", "mainScreen", this);
+        Main.nifty.fromXml("Interface/GUIScreen.xml", "mainScreen", this);
         
         //Make the cursor visible and consider to be an input
         inputManager.setCursorVisible(true);
